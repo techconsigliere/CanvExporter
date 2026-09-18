@@ -1,58 +1,53 @@
 # CanvExporter
 
-A free, open-source tool that exports Canvas LMS course content into 
-editable, offline-accessible files — so teachers can access their own 
-work whether Canvas is online or not.
+Get your Canvas course content out of Canvas and into files you can actually open, read, and print. No importing back into an LMS, no wrangling XML.
 
-Built by a Canvas Administrator in direct response to the May 2026 
-Instructure security incident.
+Built by a Canvas administrator after the May 2026 Instructure breach, when a lot of us learned the hard way that a course export hands you an `.imscc` file you can't read without Canvas.
 
-## What It Does
+There are two versions. Pick the one that fits you.
 
-CanvExporter uses the Canvas API to extract everything in a course and 
-deliver it as organized, editable files in clean subfolders:
+---
 
-- Announcements
-- Assignments
-- Discussions
-- Quizzes (with answer key and print-ready versions)
-- Content Pages
-- Question Banks
-- Rubrics (formatted for re-import)
-- Files
+## 👩‍🏫 I'm a teacher — I want my own course content
 
-Output formats: `.docx` and `.csv` — openable on any desktop computer 
-without Canvas.
+Use the **[Teacher version](teacher/)**. It's a button you drag to your browser's bookmarks bar. No install, no account, no access token. Click it inside any Canvas course and it pulls your pages, assignments, quiz questions and answer keys, discussions, and rubrics into readable `.docx` and `.csv` files.
 
-## What It Requires
+**→ [Go to the Teacher version](teacher/)** *(currently in beta — see the note there)*
 
-- Python 3.x
-- Three inputs: `API_URL`, `API_ACCESS_TOKEN`, and `COURSE_ID`
-- A Canvas account with access to the course you want to export
+---
 
-## API Compliance
+## 🛠️ I'm an admin — I want the full tool
 
-CanvExporter uses the public Canvas API exactly as designed. It makes 
-authenticated requests only on behalf of the user running the tool, 
-accesses only content that user owns or has authorized access to, 
-respects Canvas API rate limits, and stores nothing server-side. 
-Reviewed against Instructure's Acceptable Use Policy and Canvas API 
-Policy — fully compliant.
+Use the **[Admin version](admin/)**. It's a Python tool that runs with a Canvas API token and pulls complete course content, including uploaded files, into an organized folder on your computer. Built for records requests, departmental work, and any job where you need everything in one place at scale.
+
+**→ [Go to the Admin version](admin/)**
+
+---
+
+## What's the difference?
+
+| | Teacher version | Admin version |
+|---|---|---|
+| **Who runs it** | Any teacher, in their own course | An admin with an API token |
+| **Install** | Drag a button to your bookmarks bar | Python + a few libraries |
+| **Access token needed** | No | Yes |
+| **What it pulls** | Content you authored (pages, assignments, quizzes, discussions, rubrics) | Everything, including uploaded files |
+| **Output** | `.docx` and `.csv` | `.docx` and `.csv`, organized folders |
+| **Status** | Beta | Released |
+
+Both do the same core job: turn Canvas course content into readable documents. The teacher version trades completeness for zero-friction access. The admin version trades convenience for a token and pulls the whole course.
+
+A note on files: for downloading a course's uploaded **files** in bulk (PDFs, slide decks, images), Canvas already has you covered. In the course Files list, select all and click Download, and Canvas hands you a zip. Neither version reinvents that. The teacher version focuses on the authored content Canvas won't give you in readable form; the admin version pulls files too because the API token makes it possible.
+
+---
 
 ## License
 
-Creative Commons Attribution-NonCommercial 4.0 International (CC BY-NC 4.0)
+Creative Commons Attribution-NonCommercial 4.0 International (CC BY-NC 4.0). Free to use. Credit required. Not for commercial use without permission. [Full license](LICENSE).
 
-Free to use. Credit required. Not for commercial use without permission.
+---
 
-[Full license text](LICENSE)
+## Who made this
 
-## Author
-
-Chris Powell — Canvas LMS Administrator, Western Washington University  
-GitHub: [techconsigliere](https://github.com/techconsigliere)  
-Blog: [Canvas Insider](https://canvasinsider.blog)
-
-## Status
-
-Active development. Initial release coming soon.
+Chris Powell, Canvas LMS Administrator at Western Washington University. Written up from the admin side of the desk at [Canvas Insider](https://canvasinsider.blog).
+GitHub: [techconsigliere](https://github.com/techconsigliere)
