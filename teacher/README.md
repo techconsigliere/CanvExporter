@@ -2,7 +2,7 @@
 
 Pull your Canvas course content into readable files, right from your browser. No account, no access token, no software to install. You drag one button to your bookmarks bar, and from then on it's one click inside any of your courses.
 
-> ⚠️ **Beta.** This version works well on Chrome and Edge and on machines you control. It's still being tested on locked-down, IT-managed computers, where browser policies can sometimes block bookmarks-bar tools. If it doesn't work on your machine, that's useful to know: please [tell me what happened](https://github.com/techconsigliere/CanvExporter/issues). You won't break anything by trying.
+> ⚠️ **Beta.** This is still being tested across different browsers and locked-down, IT-managed computers. If it doesn't work on your machine, that's useful to know: please [tell me what happened](https://github.com/techconsigliere/CanvExporter/issues). You won't break anything by trying.
 
 ---
 
@@ -14,7 +14,7 @@ Click the button inside a Canvas course and CanvExporter pulls your authored con
 - Quiz questions and answer keys as `.docx` and `.csv`
 - Rubrics you can read and reuse
 
-Everything comes out named in plain English and organized by type. No XML, no importing back into Canvas to read it.
+Everything arrives as a single `.zip` file. Double-click it to open, and inside you'll find your content named in plain English and sorted into folders. No XML, no importing back into Canvas to read it.
 
 ---
 
@@ -24,22 +24,11 @@ Everything comes out named in plain English and organized by type. No XML, no im
 
 **2. Drag the button to your bookmarks bar.** Click and drag the blue **CanvExporter** button up onto your browser's bookmarks bar. That's the install. The whole tool lives inside that bookmark.
 
-**3. Go to a Canvas course and click it.** Open any course you teach in Canvas. With the course on screen, click the **CanvExporter** bookmark you just saved.
+**3. Go to a Canvas course and click it.** Open any course you teach in Canvas. With the course on screen, click the **CanvExporter** bookmark you just saved. A small window opens.
 
-**4. Pick a folder and let it run.** On Chrome or Edge, you'll be asked once to choose a folder (your Desktop is fine). CanvExporter writes your content there in organized subfolders. On Safari or Firefox, it hands you a single `.zip` instead — same files inside, just zipped.
+**4. Click Export.** The tool reads your course and builds a `.zip` file, which your browser downloads. Double-click the `.zip` to open it, and your content is inside, sorted into folders.
 
-That's it.
-
----
-
-## What browser you're using matters
-
-CanvExporter uses a newer browser feature to write files into a folder you choose. That feature only exists in **Chrome and Edge**.
-
-- **Chrome or Edge:** you get a real folder of files, organized and ready.
-- **Safari or Firefox:** you get a `.zip` file with the same content inside. Unzip it and everything's there, readable.
-
-If you're on a Mac, your default browser is probably Safari, so you'll get the zip unless you run it in Chrome. Either way, your content comes out readable.
+That's it. Same simple flow in Chrome, Edge, Firefox, and Safari, on any machine.
 
 ---
 
