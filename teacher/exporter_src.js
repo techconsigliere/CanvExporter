@@ -15,7 +15,7 @@
   window.__cce = true;
 
   var API = location.origin + '/api/v1';
-  var CONCURRENCY = 4;
+  var CONCURRENCY = 3;
 
   /* ======================================================================
      1. CRC-32 and a minimal ZIP writer
@@ -603,14 +603,27 @@
     return (await apiFetch(/^https?:/.test(path) ? path : API + path)).json;
   }
 
-  async function pool(items, worker, limit) {
-    var i = 0, runners = [];
+  async function pool(items, worker, limit, describe) {
+    var i = 0, runners = [], failures = [];
     for (var k = 0; k < Math.min(limit, items.length); k++) {
       runners.push((async function () {
-        while (i < items.length) { var idx = i++; await worker(items[idx], idx); }
+        while (i < items.length) {
+          var idx = i++;
+          var lastErr = null;
+          for (var attempt = 0; attempt < 3; attempt++) {
+            try { await worker(items[idx], idx); lastErr = null; break; }
+            catch (e) { lastErr = e; await sleep(1000 * (attempt + 1)); }
+          }
+          if (lastErr) {
+            var label = describe ? describe(items[idx], idx) : ('item ' + idx);
+            failures.push(label);
+            log('  Skipped ' + label + ': ' + lastErr.message, 'e');
+          }
+        }
       })());
     }
     await Promise.all(runners);
+    return failures;
   }
 
   /* ======================================================================
@@ -884,10 +897,11 @@
       try {
         var pages = await getAll('/courses/' + courseId + '/pages');
         log('Pages: ' + pages.length);
-        await pool(pages, async function (p) {
+        var pageFails = await pool(pages, async function (p) {
           var full = await getOne('/courses/' + courseId + '/pages/' + encodeURIComponent(p.url));
           await target.write(uniquePath('Pages', sanitize(full.title), '.docx'), htmlDocx(full.body, full.title));
-        }, CONCURRENCY);
+        }, CONCURRENCY, function (p) { return 'page "' + (p.title || p.url) + '"'; });
+        if (pageFails.length) log('  ' + pageFails.length + ' page(s) could not be exported', 'e');
       } catch (e) { log('  Pages failed: ' + e.message, 'e'); }
     }
 
