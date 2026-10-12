@@ -28,7 +28,7 @@ Output is plain `.docx` and `.csv`. No `.imscc`, no XML, no importing back into 
 
 ## Setup
 
-Open a terminal, go to the folder containing `canvexporter.py`, and set up an isolated environment for its libraries:
+Open a terminal, go to the folder containing `courseexport.py`, and set up an isolated environment for its libraries:
 
 ```bash
 python3 -m venv .venv
@@ -47,7 +47,7 @@ That installs the five libraries the tool needs: `requests`, `beautifulsoup4`, `
 ## Running it
 
 ```bash
-python3 canvexporter.py
+python3 courseexport.py
 ```
 
 The tool starts a small web server on your own machine and **opens your browser automatically** to a form. You'll enter three things:
@@ -72,6 +72,9 @@ Your virtual environment isn't active or the libraries aren't installed. Run `so
 
 **The export is empty or errors out.**
 Usually a wrong token or Course ID, or a token that doesn't have access to that course. Confirm the token's owner can open the course in Canvas.
+
+**A quiz answer key has fewer questions than the quiz, with a HEADS UP note at the top.**
+That quiz pulls questions from a linked question bank, which secure exams (LockDown Browser) almost always do. Canvas does not return bank-linked questions through the quiz itself, so the tool exports what it can and tells you plainly in the file. The missing questions are in the `Question_Banks` folder of the same export. The run log also names which quiz and how many questions it couldn't pull from the quiz directly.
 
 **Still stuck?**
 Open an [Issue](https://github.com/techconsigliere/CanvExporter/issues).

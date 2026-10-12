@@ -79,7 +79,7 @@ class QuestionMock:
         self.answers = d.get("answers", [])
         self.matches = d.get("matches", [])
 
-def generate_question_structure_docx(questions, doc_path, title, include_answers=False, is_bank=False):
+def generate_question_structure_docx(questions, doc_path, title, include_answers=False, is_bank=False, note=None):
     doc = Document()
     for section in doc.sections:
         section.top_margin = Inches(1)
@@ -90,48 +90,58 @@ def generate_question_structure_docx(questions, doc_path, title, include_answers
     suffix = " (Answer Key)" if include_answers else ""
     prefix = "Question Bank: " if is_bank else ""
     main_title = f"{prefix}{title}{suffix}"
-    
+
     heading = doc.add_heading(main_title, level=1)
     heading.alignment = WD_ALIGN_PARAGRAPH.CENTER
-    
+
+    # Optional honesty banner. Used when the Canvas API could not return every
+    # question the quiz actually contains (bank-linked question groups), so the
+    # file says so plainly instead of looking complete when it isn't.
+    if note:
+        p_note = doc.add_paragraph()
+        run = p_note.add_run(note)
+        run.bold = True
+        run.italic = True
+        p_note.paragraph_format.space_after = Pt(12)
+
     if not include_answers:
         p_meta = doc.add_paragraph()
         p_meta.add_run("Name: _________________________\t\tDate: _____________\n")
         p_meta.paragraph_format.space_after = Pt(18)
-    
+
     doc.add_heading("Questions", level=2)
-    
+
     for i, q in enumerate(questions, start=1):
         q_name = getattr(q, "question_name", f"Question {i}")
         q_text = clean_html(getattr(q, "question_text", ""))
         q_type = getattr(q, "question_type", "")
         points = getattr(q, "points_possible", 0)
-        
+
         if not q_text and hasattr(q, 'answers') and not getattr(q, 'answers'):
             continue
-            
+
         qh = doc.add_heading(f"{i}. {q_name} ({points} pts)", level=3)
         qh.paragraph_format.space_before = Pt(14)
         qh.paragraph_format.space_after = Pt(6)
-        
+
         qp = doc.add_paragraph(q_text)
         qp.paragraph_format.space_after = Pt(8)
-        
+
         answers = getattr(q, "answers", [])
         if not answers:
             answers = []
-        
+
         if q_type in ["multiple_choice_question", "multiple_answers_question", "true_false_question"]:
             for ans in answers:
                 ans_text = clean_html(ans.get("text", ""))
                 if not ans_text and ans.get("html"):
                     ans_text = clean_html(ans.get("html"))
-                
+
                 weight = ans.get("weight", 0)
                 if weight is None:
                     weight = 0
                 is_correct = float(weight) > 0
-                
+
                 if include_answers and is_correct:
                     p_ans = doc.add_paragraph()
                     run_box = p_ans.add_run("[X] ")
@@ -142,7 +152,7 @@ def generate_question_structure_docx(questions, doc_path, title, include_answers
                     p_ans = doc.add_paragraph("[  ] " + ans_text)
                 p_ans.paragraph_format.left_indent = Inches(0.25)
                 p_ans.paragraph_format.space_after = Pt(4)
-                
+
         elif q_type == "essay_question":
             p_space = doc.add_paragraph()
             if include_answers:
@@ -150,7 +160,7 @@ def generate_question_structure_docx(questions, doc_path, title, include_answers
             else:
                 p_space.add_run("\n" * 6)
             p_space.paragraph_format.space_after = Pt(12)
-            
+
         elif q_type in ["short_answer_question", "numerical_question"]:
             p_blank = doc.add_paragraph()
             if include_answers:
@@ -160,13 +170,13 @@ def generate_question_structure_docx(questions, doc_path, title, include_answers
             else:
                 p_blank.add_run("Answer: _____________________________________")
             p_blank.paragraph_format.space_after = Pt(12)
-            
+
         elif q_type == "matching_question":
             matches = getattr(q, "matches", [])
             for ans in answers:
                 left_side = clean_html(ans.get("text", ""))
                 right_side_correct = clean_html(ans.get("match_text", ""))
-                
+
                 p_match = doc.add_paragraph()
                 if include_answers:
                     p_match.add_run(f"_____  {left_side}  ==> Correct Match: {right_side_correct}")
@@ -174,7 +184,7 @@ def generate_question_structure_docx(questions, doc_path, title, include_answers
                     p_match.add_run(f"_____  {left_side}")
                 p_match.paragraph_format.left_indent = Inches(0.25)
                 p_match.paragraph_format.space_after = Pt(4)
-                
+
             if not include_answers and matches:
                 doc.add_paragraph("\nPossible Choices:").bold = True
                 all_choices = sorted(list(set([clean_html(m.get("text", "")) for m in matches if m.get("text", "")])))
@@ -215,12 +225,12 @@ def generate_rubric_docx(rubric_data, doc_path):
 
     table = doc.add_table(rows=1, cols=3)
     table.style = 'Table Grid'
-    
+
     hdr_cells = table.rows[0].cells
     hdr_cells[0].text = 'Criterion Description'
     hdr_cells[1].text = 'Ratings / Performance Levels'
     hdr_cells[2].text = 'Pts'
-    
+
     for item in criteria:
         row_cells = table.add_row().cells
         desc = item.get("description", "No description")
@@ -229,7 +239,7 @@ def generate_rubric_docx(rubric_data, doc_path):
         if long_desc:
             cell_0_text += f"\n\nDetails: {long_desc}"
         row_cells[0].text = cell_0_text
-        
+
         ratings = item.get("ratings", [])
         ratings_text_list = []
         for r in ratings:
@@ -240,7 +250,7 @@ def generate_rubric_docx(rubric_data, doc_path):
             if r_long:
                 r_str += f" ({r_long})"
             ratings_text_list.append(r_str)
-            
+
         row_cells[1].text = "\n".join(ratings_text_list)
         row_cells[2].text = f"{item.get('points', 0)} pts"
 
@@ -259,7 +269,7 @@ def generate_rubric_csv(rubric_data, csv_path):
     with open(csv_path, mode='w', newline='', encoding='utf-8') as csv_file:
         writer = csv.writer(csv_file)
         writer.writerow(header)
-        
+
         rubric_title = rubric_data.get("title", "Unnamed Rubric")
         for item in criteria:
             row = [
@@ -268,7 +278,7 @@ def generate_rubric_csv(rubric_data, csv_path):
                 item.get("long_description", ""),
                 str(item.get("criterion_use_range", False)).lower()
             ]
-            
+
             ratings = item.get("ratings", [])
             for i in range(max_ratings):
                 if i < len(ratings):
@@ -301,20 +311,20 @@ HTML_TEMPLATE = """
         .inst-wrapper { display: flex; align-items: center; }
         .inst-wrapper span { background: #eee; padding: 10px; border: 1px solid #ccc; border-radius: 4px 0 0 4px; border-right: none; font-size: 14px; color: #555; }
         .inst-wrapper input { border-radius: 0 4px 4px 0; }
-        
+
         /* Interactive Buttons Style Layout */
         button { background-color: #1E3A8A; color: white; border: none; padding: 14px 20px; font-size: 16px; border-radius: 4px; cursor: pointer; width: 100%; font-weight: bold; transition: background-color 0.2s; }
         button:hover { background-color: #172554; }
         button:disabled { background-color: #64748B; cursor: not-allowed; }
-        
+
         .action-button-container { display: flex; gap: 12px; margin-top: 10px; }
         #resetBtn { display: none; background-color: #059669; flex: 1; }
         #resetBtn:hover { background-color: #047857; }
         #exitBtn { display: none; background-color: #DC2626; flex: 1; }
         #exitBtn:hover { background-color: #B91C1C; }
-        
+
         #log-window { background: #1e1e1e; color: #00ff00; padding: 15px; border-radius: 4px; height: 250px; overflow-y: auto; font-family: monospace; font-size: 13px; display: none; margin-top: 20px; white-space: pre-wrap; line-height: 1.4; }
-        
+
         #shutdown-notice { display: none; background-color: #FEF3C7; border: 1px solid #F59E0B; color: #92400E; padding: 15px; border-radius: 6px; font-weight: bold; font-size: 14px; margin-top: 20px; text-align: center; line-height: 1.5; }
     </style>
 </head>
@@ -323,7 +333,7 @@ HTML_TEMPLATE = """
         <h2>Canvas Course Content Exporter</h2>
         <p>This utility downloads course content onto your desktop computer, formatted into Word (.docx) documents and Excel (.csv) spreadsheets.</p>
         <hr style="border: 0; border-top: 1px solid #eee; margin-bottom: 25px;">
-        
+
         <form id="backupForm" action="/run-backup" method="POST" target="logFrame">
             <div class="form-group">
                 <label for="institution">Your School's Canvas Instance</label>
@@ -333,12 +343,12 @@ HTML_TEMPLATE = """
                     <span>.instructure.com</span>
                 </div>
             </div>
-            
+
             <div class="form-group">
                 <label for="api_key">Access Token provided by your Canvas Admin</label>
                 <input type="password" id="api_key" name="api_key" placeholder="Paste full alphanumeric token here..." required>
             </div>
-            
+
             <div class="form-group">
                 <label for="course_id">Canvas Course ID</label>
                 <input type="text" id="course_id" name="course_id" placeholder="e.g., 1234567" required>
@@ -346,9 +356,9 @@ HTML_TEMPLATE = """
                     This Course ID can be found in your course homepage URL. E.g., <strong>1234567</strong> is the Course ID with a homepage URL of <code>https://school.instructure.com/courses/1234567</code>
                 </div>
             </div>
-            
+
             <button type="submit" id="submitBtn">Download Course Content to your Computer</button>
-            
+
             <div class="action-button-container">
                 <button type="button" id="resetBtn">Export Another Course</button>
                 <button type="button" id="exitBtn">Exit Exporter</button>
@@ -360,7 +370,7 @@ HTML_TEMPLATE = """
             The Exporter has been shut down successfully.<br>
             <strong>It is now safe to close this web browser tab.</strong>
         </div>
-        
+
         <iframe name="logFrame" style="display:none;"></iframe>
     </div>
 
@@ -378,15 +388,15 @@ HTML_TEMPLATE = """
             logWindow.innerHTML = "Initializing connection to Canvas...<br>";
             submitBtn.disabled = true;
             submitBtn.innerText = "Downloading Content...";
-            
+
             window.onMessageReceived = function(messageData) {
                 if (messageData === "__FINISHED__") {
-                    submitBtn.style.display = 'none'; 
-                    resetBtn.style.display = 'block'; 
+                    submitBtn.style.display = 'none';
+                    resetBtn.style.display = 'block';
                     exitBtn.style.display = 'block'; // Reveal native app close pipeline trigger
                     return;
                 }
-                
+
                 let cleanedData = messageData.replace(/\\\\n/g, '<br>');
                 logWindow.innerHTML += cleanedData + "<br>";
                 logWindow.scrollTop = logWindow.scrollHeight;
@@ -397,16 +407,16 @@ HTML_TEMPLATE = """
         resetBtn.onclick = function() {
             logWindow.innerHTML = "";
             logWindow.style.display = 'none';
-            
-            courseIdInput.value = ""; 
-            resetBtn.style.display = 'none'; 
+
+            courseIdInput.value = "";
+            resetBtn.style.display = 'none';
             exitBtn.style.display = 'none';
-            
-            submitBtn.style.display = 'block'; 
+
+            submitBtn.style.display = 'block';
             submitBtn.disabled = false;
             submitBtn.innerText = "Download Course Content to your Computer";
-            
-            courseIdInput.focus(); 
+
+            courseIdInput.focus();
         };
 
         // Server Kill Script Sequence Execution
@@ -415,7 +425,7 @@ HTML_TEMPLATE = """
             form.style.display = 'none';
             logWindow.style.display = 'none';
             shutdownNotice.style.display = 'block';
-            
+
             // Post death-signal to internal flask routing pipeline natively
             fetch('/shutdown', { method: 'POST' }).catch(err => {
                 // Ignore fallback network disruption drop as server dies mid-request handler lifecycle
@@ -441,9 +451,9 @@ def run_backup():
     institution = request.form.get('institution').strip()
     api_key = request.form.get('api_key').strip()
     course_id_str = request.form.get('course_id').strip()
-    
+
     api_url = f"https://{institution}.instructure.com"
-    
+
     try:
         course_id = int(course_id_str)
     except ValueError:
@@ -485,10 +495,32 @@ def run_backup():
             safe_title = sanitize_filename(quiz.title)
             try:
                 questions = list(quiz.get_questions())
-            except Exception:
+            except Exception as e:
+                # Make a failed quiz name itself in the log instead of vanishing.
+                yield log(f"  SKIPPED quiz '{quiz.title}': {str(e)}")
                 continue
-            generate_question_structure_docx(questions, os.path.join(root_dir, "Quizzes", f"{safe_title}_Printable_Quiz.docx"), quiz.title, include_answers=False)
-            generate_question_structure_docx(questions, os.path.join(root_dir, "Quizzes", f"{safe_title}_Answer_Key.docx"), quiz.title, include_answers=True)
+
+            # Canvas does not return questions that a quiz group pulls from a
+            # linked question bank. Secure exams (LockDown Browser) are almost
+            # always built this way: a question group draws from a bank so each
+            # student gets a different shuffle, and the only question authored
+            # directly into the quiz is often the honor-code item at the top.
+            # Compare what the quiz claims to hold against what the API returned,
+            # and if the quiz claims more, say so in the file rather than hand
+            # over a silently incomplete answer key.
+            expected = getattr(quiz, "question_count", None)
+            got = len(questions)
+            note = None
+            if expected and expected > got:
+                missing = expected - got
+                yield log(f"  NOTE: '{quiz.title}' reports {expected} questions, API returned {got}. "
+                          f"{missing} appear to be bank-linked (see Question_Banks folder).")
+                note = (f"HEADS UP: This quiz reports {expected} questions but Canvas returned only {got}. "
+                        f"The other {missing} are pulled from one or more linked question banks and cannot be "
+                        f"retrieved through the quiz itself. Their content is in the Question_Banks folder of this export.")
+
+            generate_question_structure_docx(questions, os.path.join(root_dir, "Quizzes", f"{safe_title}_Printable_Quiz.docx"), quiz.title, include_answers=False, note=note)
+            generate_question_structure_docx(questions, os.path.join(root_dir, "Quizzes", f"{safe_title}_Answer_Key.docx"), quiz.title, include_answers=True, note=note)
 
         # 3. Question Banks
         yield log("Exporting Question Banks...")
@@ -509,6 +541,9 @@ def run_backup():
                         if not bank_questions: continue
                         generate_question_structure_docx(bank_questions, os.path.join(root_dir, "Question_Banks", f"{safe_bank_title}_Printable_Bank.docx"), bank_title, include_answers=False, is_bank=True)
                         generate_question_structure_docx(bank_questions, os.path.join(root_dir, "Question_Banks", f"{safe_bank_title}_Answer_Key.docx"), bank_title, include_answers=True, is_bank=True)
+            else:
+                yield log(f"  Warning (Question Banks): endpoint returned HTTP {response.status_code}. "
+                          f"This is an older, undocumented Canvas API and may be restricted on your instance.")
         except Exception as e:
             yield log(f"  Warning (Question Banks): {str(e)}")
 
@@ -638,6 +673,6 @@ if __name__ == '__main__':
 
     # 2. Start the background thread to automatically launch the user's web browser
     threading.Thread(target=open_browser, daemon=True).start()
-    
+
     # 3. Launch the web app frame local interface
     app.run(host="127.0.0.1", port=5000, debug=False)
