@@ -1,0 +1,1 @@
+javascript:void(alert(%22This%20is%20the%20template%20button.%20Real%20tools%20open%20a%20panel%20inside%20Canvas.%22))

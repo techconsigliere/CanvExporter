@@ -1,0 +1,288 @@
+/* tc-design 1.0.0
+   Technology Consigliere install-page system.
+   Canonical copy. tc_build.py inlines this into every page between the
+   TC:STYLE markers, so each published page is one self-contained file:
+   no external stylesheet, no web fonts, no JavaScript. Edit here, rebuild,
+   never hand-edit the inlined copy. */
+
+:root {
+  color-scheme: light dark;
+
+  --tc-paper: #fbfbf9;
+  --tc-surface: #ffffff;
+  --tc-ink: #1f2a33;
+  --tc-muted: #4f5c66;
+  --tc-rule: #d6dce0;
+  --tc-accent: #0b5d8f;
+  --tc-accent-ink: #ffffff;
+  --tc-accent-hover: #084a72;
+  --tc-wash: #edf3f7;
+  --tc-wash-rule: #5f87a4;
+  --tc-code-bg: #eceff1;
+  --tc-caution-bg: #fbf4e4;
+  --tc-caution-rule: #a8782a;
+  --tc-caution-ink: #6b4a0f;
+  --tc-danger-bg: #fbeef0;
+  --tc-danger-rule: #b4233c;
+  --tc-danger-ink: #8c1a2e;
+  --tc-focus: #0b5d8f;
+
+  --tc-serif: Charter, "Bitstream Charter", "Iowan Old Style", Georgia, "Times New Roman", serif;
+  --tc-sans: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+  --tc-mono: ui-monospace, "Cascadia Mono", Consolas, Menlo, monospace;
+
+  --tc-measure: 42rem;
+  --tc-radius: 6px;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --tc-paper: #14181b;
+    --tc-surface: #1b2126;
+    --tc-ink: #e4e8eb;
+    --tc-muted: #a7b2ba;
+    --tc-rule: #313a41;
+    --tc-accent: #7cbde8;
+    --tc-accent-ink: #0c1a24;
+    --tc-accent-hover: #a3d2f1;
+    --tc-wash: #182630;
+    --tc-wash-rule: #4f7896;
+    --tc-code-bg: #242b31;
+    --tc-caution-bg: #2a2416;
+    --tc-caution-rule: #c9a24a;
+    --tc-caution-ink: #e8cb85;
+    --tc-danger-bg: #2e1a1f;
+    --tc-danger-rule: #e0697f;
+    --tc-danger-ink: #f2a3b1;
+    --tc-focus: #a3d2f1;
+  }
+}
+:root[data-theme="dark"] {
+  --tc-paper: #14181b;
+  --tc-surface: #1b2126;
+  --tc-ink: #e4e8eb;
+  --tc-muted: #a7b2ba;
+  --tc-rule: #313a41;
+  --tc-accent: #7cbde8;
+  --tc-accent-ink: #0c1a24;
+  --tc-accent-hover: #a3d2f1;
+  --tc-wash: #182630;
+  --tc-wash-rule: #4f7896;
+  --tc-code-bg: #242b31;
+  --tc-caution-bg: #2a2416;
+  --tc-caution-rule: #c9a24a;
+  --tc-caution-ink: #e8cb85;
+  --tc-danger-bg: #2e1a1f;
+  --tc-danger-rule: #e0697f;
+  --tc-danger-ink: #f2a3b1;
+  --tc-focus: #a3d2f1;
+}
+
+/* ---- Base ---- */
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  background: var(--tc-paper);
+  color: var(--tc-ink);
+  font: 17px/1.6 var(--tc-serif);
+}
+.tc-page { max-width: var(--tc-measure); margin: 0 auto; padding: 2rem 1.5rem 5rem; }
+p { margin: 0 0 1rem; }
+a { color: var(--tc-accent); text-underline-offset: 0.15em; }
+a:hover { color: var(--tc-accent-hover); }
+:focus-visible { outline: 3px solid var(--tc-focus); outline-offset: 3px; border-radius: 2px; }
+ul, ol { padding-left: 1.3rem; margin: 0 0 1rem; }
+li { margin: 0.35rem 0; }
+strong, b { font-weight: 650; }
+
+h1, h2, h3 { font-family: var(--tc-serif); font-weight: 600; color: var(--tc-ink); }
+h1 { font-size: 2.1rem; line-height: 1.15; letter-spacing: -0.015em; margin: 0 0 0.5rem; }
+h2 {
+  font-size: 1.35rem; line-height: 1.25; letter-spacing: -0.01em;
+  margin: 3.5rem 0 0.9rem; padding-top: 1.75rem; border-top: 1px solid var(--tc-rule);
+}
+h3 { font-size: 1.05rem; line-height: 1.3; margin: 2rem 0 0.4rem; }
+.tc-first { border-top: 0; padding-top: 0; margin-top: 2.5rem; }
+
+code, kbd {
+  font-family: var(--tc-mono); font-size: 0.85em;
+  background: var(--tc-code-bg); padding: 0.1em 0.35em; border-radius: 3px;
+}
+kbd { border: 1px solid var(--tc-rule); border-bottom-width: 2px; white-space: nowrap; }
+pre {
+  font-family: var(--tc-mono); font-size: 0.82rem; line-height: 1.5;
+  background: var(--tc-code-bg); padding: 0.9rem 1rem; border-radius: var(--tc-radius);
+  overflow-x: auto; margin: 0 0 1rem;
+}
+pre code { background: none; padding: 0; font-size: inherit; }
+
+/* UI text uses the sans stack; reading text stays serif. */
+.tc-mast, .tc-lede-row, .tc-steps, .tc-drag-note, .tc-facts, .tc-refresh,
+.tc-changelog, .tc-license, .tc-foot, .tc-badge, .tc-grab, .tc-skip, .tc-note__label {
+  font-family: var(--tc-sans);
+}
+
+/* ---- Skip link ---- */
+.tc-skip {
+  position: absolute; left: 1rem; top: -4rem; z-index: 10;
+  background: var(--tc-surface); color: var(--tc-accent);
+  padding: 0.5rem 0.9rem; border: 2px solid var(--tc-focus); border-radius: var(--tc-radius);
+}
+.tc-skip:focus { top: 1rem; }
+
+/* ---- Masthead: the family mark ---- */
+.tc-mast {
+  display: flex; flex-wrap: wrap; align-items: baseline; gap: 0.25rem 0.6rem;
+  font-size: 0.8rem; letter-spacing: 0.08em; text-transform: uppercase;
+  color: var(--tc-muted); padding-bottom: 0.9rem; margin-bottom: 2.5rem;
+  border-bottom: 1px solid var(--tc-rule);
+}
+.tc-mast a { color: var(--tc-ink); text-decoration: none; font-weight: 650; }
+.tc-mast a:hover { text-decoration: underline; }
+
+/* ---- Title block ---- */
+.tc-lede { color: var(--tc-muted); font-size: 1.08rem; max-width: 36rem; margin: 0 0 0.9rem; }
+.tc-lede-row { display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: center; margin: 0 0 2rem; }
+
+/* ---- Beta badge ---- */
+.tc-badge {
+  display: inline-block; font-size: 0.72rem; font-weight: 700; line-height: 1;
+  letter-spacing: 0.08em; text-transform: uppercase;
+  padding: 0.35em 0.6em; border-radius: 999px;
+  color: var(--tc-caution-ink); background: var(--tc-caution-bg);
+  border: 1px solid var(--tc-caution-rule); vertical-align: 0.2em;
+}
+h2 .tc-badge, h1 .tc-badge { margin-left: 0.5rem; }
+
+/* ---- Install panel: the point of the page ---- */
+.tc-install {
+  background: var(--tc-wash); border: 1px solid var(--tc-wash-rule);
+  border-radius: 10px; padding: 1.5rem 1.6rem 1.4rem; margin: 0 0 1.25rem;
+}
+.tc-steps { margin: 0 0 1.25rem; padding-left: 1.4rem; font-size: 0.95rem; }
+.tc-steps li { margin: 0.4rem 0; padding-left: 0.2rem; }
+.tc-grab {
+  display: inline-flex; align-items: center; gap: 0.65rem;
+  background: var(--tc-accent); color: var(--tc-accent-ink);
+  border: 2px solid var(--tc-accent); border-radius: var(--tc-radius);
+  font-size: 1rem; font-weight: 700; text-decoration: none;
+  padding: 0.75rem 1.25rem 0.75rem 0.9rem; cursor: grab;
+  box-shadow: 0 2px 0 rgba(0, 0, 0, 0.18);
+}
+.tc-grab::before {
+  /* grip dots: decorative, never part of the bookmark name */
+  content: ""; flex: none; width: 0.55rem; height: 1rem; opacity: 0.85;
+  background-image: radial-gradient(currentColor 1.3px, transparent 1.6px);
+  background-size: 0.275rem 0.33rem;
+}
+.tc-grab:hover { background: var(--tc-accent-hover); border-color: var(--tc-accent-hover); color: var(--tc-accent-ink); }
+.tc-grab:active { cursor: grabbing; transform: translateY(1px); box-shadow: none; }
+.tc-grab:focus-visible { outline-offset: 4px; }
+.tc-drag-note { font-size: 0.88rem; color: var(--tc-muted); margin: 0.9rem 0 0; }
+.tc-install details { margin-top: 1rem; font-size: 0.9rem; font-family: var(--tc-sans); }
+.tc-install summary { cursor: pointer; color: var(--tc-accent); }
+.tc-install details p, .tc-install details ol { margin-top: 0.6rem; }
+
+/* ---- Facts: version, runs on, needs, last tested ---- */
+.tc-facts {
+  display: grid; grid-template-columns: max-content 1fr; gap: 0.2rem 1rem;
+  font-size: 0.88rem; color: var(--tc-muted);
+  border-left: 3px solid var(--tc-rule); padding: 0.2rem 0 0.2rem 0.9rem; margin: 0 0 1.75rem;
+}
+.tc-facts dt { color: var(--tc-ink); font-weight: 650; }
+.tc-facts dd { margin: 0; }
+
+/* ---- What it does / what it can't do ---- */
+.tc-scope { display: grid; gap: 0.5rem 2rem; margin: 0 0 1rem; }
+@media (min-width: 40rem) { .tc-scope { grid-template-columns: 1fr 1fr; } }
+.tc-scope h3 { margin-top: 1rem; }
+.tc-scope ul { font-size: 0.97rem; }
+
+/* ---- Notes: info, caution, danger ---- */
+.tc-note {
+  border-left: 4px solid var(--tc-wash-rule); background: var(--tc-wash);
+  padding: 1rem 1.15rem; margin: 1.5rem 0; font-size: 0.97rem; border-radius: 0 var(--tc-radius) var(--tc-radius) 0;
+}
+.tc-note > :last-child { margin-bottom: 0; }
+.tc-note__label {
+  display: block; font-size: 0.75rem; font-weight: 700; letter-spacing: 0.08em;
+  text-transform: uppercase; margin: 0 0 0.4rem;
+}
+.tc-note--caution { background: var(--tc-caution-bg); border-left-color: var(--tc-caution-rule); }
+.tc-note--caution .tc-note__label { color: var(--tc-caution-ink); }
+.tc-note--danger { background: var(--tc-danger-bg); border-left-color: var(--tc-danger-rule); }
+.tc-note--danger .tc-note__label { color: var(--tc-danger-ink); }
+
+/* ---- Permissions and privacy ---- */
+.tc-trust ul { list-style: none; padding: 0; }
+.tc-trust li { padding-left: 1.4rem; position: relative; margin: 0.65rem 0; }
+.tc-trust li::before {
+  content: ""; position: absolute; left: 0.1rem; top: 0.5em;
+  width: 0.55rem; height: 0.3rem; border: solid var(--tc-accent);
+  border-width: 0 0 2px 2px; transform: rotate(-45deg);
+}
+
+/* ---- Stale-page note ---- */
+.tc-refresh {
+  font-size: 0.86rem; color: var(--tc-muted);
+  border: 1px dashed var(--tc-rule); border-radius: var(--tc-radius);
+  padding: 0.75rem 1rem; margin: 2.5rem 0 0;
+}
+.tc-refresh p { margin: 0 0 0.4rem; }
+.tc-refresh p:last-child { margin: 0; }
+.tc-refresh strong { color: var(--tc-ink); }
+
+/* ---- Version and changelog ---- */
+.tc-changelog { font-size: 0.88rem; color: var(--tc-muted); margin: 1.25rem 0 0; }
+.tc-changelog summary { cursor: pointer; }
+.tc-changelog summary strong { color: var(--tc-ink); }
+.tc-changelog ul { margin-top: 0.6rem; }
+
+/* ---- License and footer ---- */
+.tc-license { font-size: 0.86rem; color: var(--tc-muted); margin: 1.25rem 0 0; }
+.tc-foot {
+  margin-top: 3rem; padding-top: 1.25rem; border-top: 1px solid var(--tc-rule);
+  font-size: 0.86rem; color: var(--tc-muted);
+}
+.tc-foot nav ul { list-style: none; padding: 0; margin: 0 0 0.9rem; display: flex; flex-wrap: wrap; gap: 0.3rem 1.25rem; }
+.tc-foot nav li { margin: 0; }
+.tc-foot [aria-current="page"] { color: var(--tc-ink); font-weight: 650; text-decoration: none; }
+.tc-foot p { margin: 0 0 0.4rem; }
+
+/* ---- Choice cards (switchboard pages) ---- */
+.tc-choices { display: grid; gap: 1rem; margin: 0 0 1.5rem; }
+@media (min-width: 40rem) { .tc-choices { grid-template-columns: 1fr 1fr; } }
+.tc-choice {
+  border: 1px solid var(--tc-rule); background: var(--tc-surface);
+  border-radius: 10px; padding: 1.15rem 1.25rem;
+}
+.tc-choice h2 { border: 0; padding: 0; margin: 0 0 0.5rem; font-size: 1.15rem; }
+.tc-choice p { font-size: 0.97rem; }
+.tc-choice > :last-child { margin-bottom: 0; }
+
+/* ---- Tables ---- */
+.tc-table-wrap { overflow-x: auto; margin: 0 0 1.25rem; }
+table { border-collapse: collapse; width: 100%; font-size: 0.92rem; font-family: var(--tc-sans); }
+th, td { text-align: left; vertical-align: top; padding: 0.5rem 0.75rem 0.5rem 0; border-bottom: 1px solid var(--tc-rule); }
+thead th { color: var(--tc-muted); font-weight: 650; }
+tbody th { font-weight: 650; }
+
+/* ---- Phone ---- */
+@media (max-width: 30rem) {
+  body { font-size: 16.5px; }
+  .tc-page { padding: 1.25rem 1rem 4rem; }
+  h1 { font-size: 1.75rem; }
+  h2 { font-size: 1.25rem; }
+  .tc-install { padding: 1.15rem 1rem; }
+  .tc-grab { display: flex; justify-content: center; }
+}
+
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+@media print { .tc-install, .tc-skip, .tc-refresh { display: none; } a { color: inherit; } }
+
+/* ---- Screen-reader-only text ---- */
+.tc-sr {
+  position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0;
+}

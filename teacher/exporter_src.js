@@ -3,15 +3,17 @@
 
    No server, no libraries, no access token. Runs on the Canvas origin under
    the signed-in user's session and writes a folder tree of .docx and .csv
-   files to a folder the user picks (Chrome/Edge), or a single .zip (others).
+   files into a single .zip download, in every browser.
 
-   This is the readable source. Minify it and prefix with "javascript:" to
-   get the bookmarklet; install-exporter.html already contains that version.
+   This is the readable source. URL-encode it and prefix "javascript:" to
+   get the bookmarklet; teacher/exporter.bookmarklet.txt holds that version.
    ========================================================================== */
 (function () {
   'use strict';
 
   if (window.__cce) { alert('The exporter is already open in this tab.'); return; }
+  var VERSION = '0.5.0';
+  var HOME = 'https://techconsigliere.github.io/CanvExporter/teacher/';
   window.__cce = true;
 
   var API = location.origin + '/api/v1';
@@ -709,6 +711,7 @@
     'button:focus-visible{outline:3px solid #1f7ab8;outline-offset:2px}' +
     '#log{display:none;margin-top:18px;background:#10161e;color:#a9e6b0;border-radius:4px;padding:12px 14px;height:200px;overflow-y:auto;font-family:ui-monospace,Menlo,Consolas,monospace;font-size:12.5px;line-height:1.6;white-space:pre-wrap}' +
     '#log .e{color:#ff9c8a}#log .k{color:#8fd4ff}' +
+    '.cr{font-size:12px;color:#56606a;margin:16px 0 0;line-height:1.5}.cr a{color:#0a5c8a}' +
     '</style>' +
     '<div class="s"><div class="p" role="dialog" aria-modal="true">' +
     '<h1>Export course content</h1>' +
@@ -728,8 +731,10 @@
     '</div>' +
     '<div class="w">Gradebook creates a spreadsheet of named students and their scores. Leave it unchecked unless you need it, and keep the file wherever your institution requires grades to be kept.</div>' +
     '</fieldset>' +
-    '<div class="a"><button id="go">Choose folder and export</button><button id="x">Close</button></div>' +
+    '<div class="a"><button id="go">Export to .zip</button><button id="x">Close</button></div>' +
     '<div id="log" aria-live="polite"></div>' +
+    '<p class="cr">Canvas course exporter ' + VERSION + ' \u00b7 Technology Consigliere \u00b7 ' +
+    '<a href="' + HOME + '" target="_blank" rel="noopener noreferrer">Help and updates</a></p>' +
     '</div></div>';
   document.body.appendChild(host);
 
@@ -782,7 +787,7 @@
     }
     running = false;
     goBtn.disabled = false;
-    goBtn.textContent = 'Choose folder and export';
+    goBtn.textContent = 'Export to .zip';
   });
 
   /* ======================================================================
