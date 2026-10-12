@@ -399,9 +399,15 @@
 
   function weightOf(a) { var w = parseFloat(a.weight); return isNaN(w) ? 0 : w; }
 
-  function questionDocx(questions, title, withAnswers, isBank) {
+  function questionDocx(questions, title, withAnswers, isBank, note) {
     var body = heading((isBank ? 'Question Bank: ' : '') + title + (withAnswers ? ' (Answer Key)' : ''),
       0, { align: 'center' });
+
+    // Canvas does not return questions a quiz group pulls from a linked bank,
+    // so the file says so plainly instead of looking complete when it isn't.
+    if (note) {
+      body += para(run(note, { bold: true, italic: true }), { after: 240 });
+    }
 
     if (!withAnswers) {
       body += para(run('Name: _________________________\t\tDate: _____________'), { after: 360 });
@@ -832,8 +838,27 @@
           try { questions = await getAll('/courses/' + courseId + '/quizzes/' + q.id + '/questions'); }
           catch (e) { log('  Skipped "' + q.title + '": ' + e.message, 'e'); return; }
           var base = sanitize(q.title);
-          await target.write(uniquePath('Quizzes', base + '_Printable_Quiz', '.docx'), questionDocx(questions, q.title, false, false));
-          await target.write(uniquePath('Quizzes', base + '_Answer_Key', '.docx'), questionDocx(questions, q.title, true, false));
+
+          // A secure exam (LockDown Browser) almost always pulls its questions
+          // from a linked bank via a question group, and the quiz endpoint will
+          // not return those. The quiz claims more questions than it hands over,
+          // so flag the gap in the file and the log rather than ship a silent
+          // one-question answer key. The bank content is saved under
+          // Question_Banks/ by the Question banks step.
+          var expected = (typeof q.question_count === 'number') ? q.question_count : null;
+          var note = null;
+          if (expected && expected > questions.length) {
+            var missing = expected - questions.length;
+            log('  Note: "' + q.title + '" reports ' + expected + ' questions, API returned ' +
+              questions.length + '. ' + missing + ' are bank-linked (see Question_Banks/).');
+            note = 'HEADS UP: This quiz reports ' + expected + ' questions but Canvas returned only ' +
+              questions.length + '. The other ' + missing + ' are pulled from one or more linked ' +
+              'question banks and cannot be retrieved through the quiz itself. Their content is in the ' +
+              'Question_Banks folder of this export.';
+          }
+
+          await target.write(uniquePath('Quizzes', base + '_Printable_Quiz', '.docx'), questionDocx(questions, q.title, false, false, note));
+          await target.write(uniquePath('Quizzes', base + '_Answer_Key', '.docx'), questionDocx(questions, q.title, true, false, note));
         }, 2);
 
         var newQ = assignments.filter(function (a) { return a.is_quiz_lti_assignment === true; });
