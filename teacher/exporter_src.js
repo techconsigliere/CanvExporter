@@ -12,7 +12,7 @@
   'use strict';
 
   if (window.__cce) { alert('The exporter is already open in this tab.'); return; }
-  var VERSION = '0.5.0';
+  var VERSION = '0.7.0';
   var HOME = 'https://techconsigliere.github.io/CanvExporter/teacher/';
   window.__cce = true;
 
