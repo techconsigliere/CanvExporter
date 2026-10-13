@@ -12,8 +12,8 @@
   'use strict';
 
   if (window.__cce) { alert('The exporter is already open in this tab.'); return; }
-  var VERSION = '0.7.0';
-  var HOME = 'https://techconsigliere.github.io/CanvExporter/teacher/';
+  var VERSION = '0.7.1';
+  var HOME = 'https://techconsigliere.github.io/CanvExporter/teacher/install-exporter.html';
   window.__cce = true;
 
   var API = location.origin + '/api/v1';
@@ -720,8 +720,10 @@
     '.cr{font-size:12px;color:#56606a;margin:16px 0 0;line-height:1.5}.cr a{color:#0a5c8a}' +
     '</style>' +
     '<div class="s"><div class="p" role="dialog" aria-modal="true">' +
-    '<h1>Export course content</h1>' +
-    '<p class="d">Saves this course as Word documents and spreadsheets, delivered as a single .zip file. Double-click the .zip to open it and find everything sorted into folders. Keep this tab open until it finishes.</p>' +
+    '<h1>CanvExporter</h1>' +
+    '<p class="d"><strong>A Canvas Course Content Exporter</strong><br>' +
+    'Version ' + VERSION + ' · by Chris Powell, a Canvas LMS administrator in higher education</p>' +
+    '<p class="d">Saves this course as Word documents and Excel spreadsheets, delivered as a single .zip file. Double-click the .zip to open it and find everything sorted into folders. Keep this tab open until it finishes.</p>' +
     '<label class="f" for="cid">Course ID</label><input type="text" id="cid" inputmode="numeric" autocomplete="off">' +
     '<p class="h">Filled in from the page you are on. Change it to export a different course you can access.</p>' +
     '<fieldset><legend>Include</legend><div class="c">' +
@@ -739,8 +741,7 @@
     '</fieldset>' +
     '<div class="a"><button id="go">Export to .zip</button><button id="x">Close</button></div>' +
     '<div id="log" aria-live="polite"></div>' +
-    '<p class="cr">Canvas course exporter ' + VERSION + ' \u00b7 Technology Consigliere \u00b7 ' +
-    '<a href="' + HOME + '" target="_blank" rel="noopener noreferrer">Help and updates</a></p>' +
+    '<p class="cr"><a href="' + HOME + '" target="_blank" rel="noopener noreferrer">Help and updates</a> \u00b7 Technology Consigliere</p>' +
     '</div></div>';
   document.body.appendChild(host);
 

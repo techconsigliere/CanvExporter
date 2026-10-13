@@ -37,7 +37,8 @@
   --tc-danger-ink: #8c1a2e;
   --tc-focus: #0b5d8f;
 
-  --tc-serif: Charter, "Bitstream Charter", "Iowan Old Style", Georgia, "Times New Roman", serif;
+  /* Sans everywhere: the "serif" slot is mapped to the sans stack on purpose. */
+  --tc-serif: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
   --tc-sans: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
   --tc-mono: ui-monospace, "Cascadia Mono", Consolas, Menlo, monospace;
 
@@ -190,18 +191,7 @@ h2 .tc-badge, h1 .tc-badge { margin-left: 0.5rem; }
 .tc-grab:active { cursor: grabbing; transform: translateY(1px); box-shadow: none; }
 .tc-grab:focus-visible { outline-offset: 4px; }
 .tc-drag-note { font-size: 0.88rem; color: var(--tc-muted); margin: 0.9rem 0 0; }
-.tc-install__alt { display: flex; flex-wrap: wrap; align-items: center; gap: 0.55rem 0.9rem; margin: 0.95rem 0 0; }
-.tc-copy {
-font-family: var(--tc-sans); font-size: 0.95rem; font-weight: 650;
-color: var(--tc-accent); background: var(--tc-surface);
-border: 2px solid var(--tc-accent); border-radius: var(--tc-radius);
-padding: 0.6rem 1.05rem; cursor: pointer;
-}
-.tc-copy:hover { background: var(--tc-accent); color: var(--tc-accent-ink); }
-.tc-copy:active { transform: translateY(1px); }
-.tc-copy:focus-visible { outline-offset: 3px; }
-.tc-copy[data-done="1"] { border-color: var(--tc-accent); background: var(--tc-wash); color: var(--tc-accent); }
-.tc-copy__msg { font-family: var(--tc-sans); font-size: 0.88rem; color: var(--tc-muted); }
+.tc-grab__t { display: inline-block; line-height: 1.2; text-align: center; }
 .tc-install details { margin-top: 1rem; font-size: 0.9rem; font-family: var(--tc-sans); }
 .tc-install summary { cursor: pointer; color: var(--tc-accent); }
 .tc-install details p, .tc-install details ol { margin-top: 0.6rem; }

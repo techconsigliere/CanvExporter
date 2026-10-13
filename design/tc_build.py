@@ -70,7 +70,17 @@ def bookmarklet_block(m: re.Match) -> str:
     for bad in UNSAFE:
         if bad in url:
             raise SystemExit(f"{src} contains {bad!r}, which would break the href.")
-    anchor = f'<a class="tc-grab" href="{url}">{html.escape(label, quote=False)}</a>'
+    # A label with " / " renders across two lines on the button. The dragged
+    # bookmark name is the two parts joined by a space.
+    if " / " in label:
+        a, b = label.split(" / ", 1)
+        inner = (
+            f'<span class="tc-grab__t">{html.escape(a, quote=False)} '
+            f'<br>{html.escape(b, quote=False)}</span>'
+        )
+    else:
+        inner = html.escape(label, quote=False)
+    anchor = f'<a class="tc-grab" href="{url}">{inner}</a>'
     return (
         f'<!-- TC:BOOKMARKLET src="{src}" label="{label}" -->\n'
         f"{anchor}\n<!-- /TC:BOOKMARKLET -->"
