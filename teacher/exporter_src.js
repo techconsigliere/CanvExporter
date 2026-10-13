@@ -1,5 +1,5 @@
 /* ============================================================================
-   Canvas Course Content Exporter — self-contained bookmarklet source
+   Canvas Course Content Exporter - self-contained bookmarklet source
 
    No server, no libraries, no access token. Runs on the Canvas origin under
    the signed-in user's session and writes a folder tree of .docx and .csv
@@ -12,7 +12,7 @@
   'use strict';
 
   if (window.__cce) { alert('The exporter is already open in this tab.'); return; }
-  var VERSION = '0.7.1';
+  var VERSION = '0.7.2';
   var HOME = 'https://techconsigliere.github.io/CanvExporter/teacher/install-exporter.html';
   window.__cce = true;
 
@@ -123,7 +123,7 @@
      A minimal .docx needs [Content_Types].xml, _rels/.rels,
      word/document.xml, and word/_rels/document.xml.rels for hyperlinks.
      Headings use direct formatting plus <w:outlineLvl>, which is what
-     actually drives Word's navigation pane — so no styles.xml is needed.
+     actually drives Word's navigation pane - so no styles.xml is needed.
      ====================================================================== */
 
   function esc(s) {
@@ -327,7 +327,7 @@
   }
 
   /* Only emit a paragraph for a block that actually holds text. A container
-     that holds other blocks gets recursed into instead — otherwise
+     that holds other blocks gets recursed into instead - otherwise
      <div><p>Hello</p></div> writes "Hello" twice. */
   function walkBlocks(node, ctx, level, list) {
     var out = '';
@@ -578,10 +578,10 @@
       if (res.status === 403) {
         var t = await res.text();
         if (/rate limit/i.test(t)) { await sleep(2000 * (attempt + 1)); continue; }
-        throw new Error('403 Forbidden — ' + url);
+        throw new Error('403 Forbidden - ' + url);
       }
       if (res.status === 401) throw new Error('Your Canvas session expired. Reload the page and sign in again.');
-      if (!res.ok) throw new Error(res.status + ' — ' + url);
+      if (!res.ok) throw new Error(res.status + ' - ' + url);
 
       if (parseFloat(res.headers.get('X-Rate-Limit-Remaining') || '999') < 150) await sleep(1500);
 
@@ -784,7 +784,7 @@
     var dirHandle = null;
 
     goBtn.disabled = true;
-    goBtn.textContent = 'Exporting…';
+    goBtn.textContent = 'Exporting...';
     running = true;
 
     try {
@@ -802,7 +802,7 @@
      ====================================================================== */
 
   async function runExport(courseId, want, dirHandle) {
-    log('Connecting to ' + location.host + '…');
+    log('Connecting to ' + location.host + '...');
     var course = await getOne('/courses/' + courseId + '?include[]=syllabus_body');
     log('Course: ' + course.name, 'k');
 
@@ -814,7 +814,7 @@
       log('Writing to ' + folderName + '/');
     } else {
       target = new ZipTarget(folderName);
-      log('Building your zip file…');
+      log('Building your zip file...');
     }
 
     var assignments = [];

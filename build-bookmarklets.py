@@ -33,7 +33,12 @@ TOOLS = {
 # Characters left unencoded. Everything else is percent-encoded, including
 # quotes and angle brackets (the URL lands inside href="...") and # (some
 # browsers treat a bare # as the start of a fragment and drop the rest).
-SAFE = "!$&*+,-./:;=?@_~"
+# & is deliberately NOT safe: the URL lands inside an HTML href attribute,
+# where a bare "&amp;" (etc.) is an HTML entity the browser decodes when the
+# link is dragged to the bookmarks bar, which would silently strip the
+# exporter's own XML-escaping code. Encoding & as %26 keeps the entity text
+# intact through a drag; it round-trips back to & when the bookmarklet runs.
+SAFE = "!$*+,-./:;=?@_~"
 
 
 def main() -> int:
