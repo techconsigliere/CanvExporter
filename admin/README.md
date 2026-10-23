@@ -87,4 +87,4 @@ This tool acts entirely with the permissions of the token you give it, through t
 
 ---
 
-*Part of [CanvExporter](https://github.com/techconsigliere/CanvExporter) by Chris Powell, Canvas LMS Administrator at Western Washington University. Written up at [Canvas Insider](https://canvasinsider.blog).*
+*Part of [CanvExporter](https://github.com/techconsigliere/CanvExporter) by Chris Powell, Canvas LMS Administrator at Western Washington University. Written up at [Canvas Insider](https://www.canvasinsider.blog).*

@@ -50,4 +50,4 @@ That's genuinely useful information while this is in beta. Open an [Issue](https
 
 ---
 
-*Part of [CanvExporter](https://github.com/techconsigliere/CanvExporter) by Chris Powell. Written up at [Canvas Insider](https://canvasinsider.blog).*
+*Part of [CanvExporter](https://github.com/techconsigliere/CanvExporter) by Chris Powell. Written up at [Canvas Insider](https://www.canvasinsider.blog).*
