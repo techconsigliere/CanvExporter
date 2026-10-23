@@ -49,5 +49,5 @@ Creative Commons Attribution-NonCommercial 4.0 International (CC BY-NC 4.0). Fre
 
 ## Who made this
 
-Chris Powell, Canvas LMS Administrator at Western Washington University. Written up from the admin side of the desk at [Canvas Insider](https://canvasinsider.blog).
+Chris Powell, Canvas LMS Administrator at Western Washington University. Written up from the admin side of the desk at [Canvas Insider](https://www.canvasinsider.blog).
 GitHub: [techconsigliere](https://github.com/techconsigliere)
