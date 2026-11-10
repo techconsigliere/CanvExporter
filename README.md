@@ -43,7 +43,7 @@ A note on files: for downloading a course's uploaded **files** in bulk (PDFs, sl
 
 ## License
 
-Creative Commons Attribution-NonCommercial 4.0 International (CC BY-NC 4.0). Free to use. Credit required. Not for commercial use without permission. [Full license](LICENSE).
+MIT License. Free to use, modify, and share, including at your institution. Credit appreciated. [Full license](LICENSE). Releases before November 2026 were published under CC BY-NC 4.0.
 
 ---
 
