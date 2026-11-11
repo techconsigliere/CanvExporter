@@ -12,7 +12,7 @@
   'use strict';
 
   if (window.__cce) { alert('The exporter is already open in this tab.'); return; }
-  var VERSION = '0.7.2';
+  var VERSION = '0.7.3';
   var HOME = 'https://techconsigliere.github.io/CanvExporter/teacher/install-exporter.html';
   window.__cce = true;
 
@@ -698,26 +698,26 @@
   shadow.innerHTML =
     '<style>' +
     ':host{all:initial}' +
-    '.s{position:fixed;inset:0;background:rgba(15,22,33,.55);z-index:2147483647;display:flex;align-items:center;justify-content:center;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}' +
-    '.p{background:#fff;color:#16202c;width:540px;max-width:94vw;max-height:90vh;overflow:auto;border-radius:6px;padding:24px 26px;box-shadow:0 18px 48px rgba(0,0,0,.35)}' +
+    '.s{position:fixed;inset:0;background:rgba(15,22,33,.55);z-index:2147483647;display:flex;align-items:center;justify-content:center;font-family:"Fira Sans",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}' +
+    '.p{background:#fff;color:#1C2023;width:540px;max-width:94vw;max-height:90vh;overflow:auto;border-radius:6px;padding:24px 26px;box-shadow:0 18px 48px rgba(0,0,0,.35)}' +
     'h1{font-size:19px;margin:0 0 6px}' +
-    '.d{font-size:13px;color:#5b6774;margin:0 0 18px;line-height:1.5}' +
+    '.d{font-size:13px;color:#55656F;margin:0 0 18px;line-height:1.5}' +
     'label.f{display:block;font-size:13px;font-weight:700;margin-bottom:6px}' +
     'input[type=text]{width:100%;box-sizing:border-box;padding:9px 10px;font-size:15px;border:1px solid #a9b0b8;border-radius:4px}' +
-    '.h{font-size:12px;color:#5b6774;margin-top:5px;line-height:1.4}' +
+    '.h{font-size:12px;color:#55656F;margin-top:5px;line-height:1.4}' +
     'fieldset{border:1px solid #e2e5e9;border-radius:4px;margin:18px 0 0;padding:12px 14px}' +
-    'legend{font-size:12px;font-weight:700;color:#5b6774;padding:0 6px}' +
+    'legend{font-size:12px;font-weight:700;color:#55656F;padding:0 6px}' +
     '.c{display:grid;grid-template-columns:1fr 1fr;gap:6px 14px}' +
     '.c label{font-size:13px;display:flex;align-items:center;gap:7px}' +
     '.w{background:#fdf5e6;border:1px solid #e8c26a;border-radius:4px;padding:10px 12px;font-size:12px;line-height:1.5;margin-top:12px;color:#6b4d09}' +
     '.a{display:flex;gap:10px;margin-top:20px}' +
     'button{font:inherit;font-size:15px;font-weight:700;padding:11px 18px;border-radius:4px;border:none;cursor:pointer}' +
-    '#go{background:#0a5c8a;color:#fff;flex:1}#go:disabled{background:#8a959f;cursor:not-allowed}' +
-    '#x{background:#fff;border:1px solid #a9b0b8;color:#16202c}' +
-    'button:focus-visible{outline:3px solid #1f7ab8;outline-offset:2px}' +
+    '#go{background:#003F87;color:#fff;flex:1}#go:disabled{background:#8a959f;cursor:not-allowed}' +
+    '#x{background:#fff;border:1px solid #a9b0b8;color:#1C2023}' +
+    'button:focus-visible{outline:3px solid #007AC8;outline-offset:2px}' +
     '#log{display:none;margin-top:18px;background:#10161e;color:#a9e6b0;border-radius:4px;padding:12px 14px;height:200px;overflow-y:auto;font-family:ui-monospace,Menlo,Consolas,monospace;font-size:12.5px;line-height:1.6;white-space:pre-wrap}' +
     '#log .e{color:#ff9c8a}#log .k{color:#8fd4ff}' +
-    '.cr{font-size:12px;color:#56606a;margin:16px 0 0;line-height:1.5}.cr a{color:#0a5c8a}' +
+    '.cr{font-size:12px;color:#55656F;margin:16px 0 0;line-height:1.5}.cr a{color:#003F87}' +
     '</style>' +
     '<div class="s"><div class="p" role="dialog" aria-modal="true">' +
     '<h1>CanvExporter</h1>' +
@@ -743,6 +743,16 @@
     '<div id="log" aria-live="polite"></div>' +
     '<p class="cr"><a href="' + HOME + '" target="_blank" rel="noopener noreferrer">Help and updates</a> \u00b7 Technology Consigliere</p>' +
     '</div></div>';
+  if (!document.getElementById('canvexporter-font')) {
+    var FB = 'https://techconsigliere.github.io/CanvExporter/fonts/';
+    var fs = document.createElement('style'); fs.id = 'canvexporter-font';
+    fs.textContent =
+      '@font-face{font-family:"Fira Sans";font-weight:400;font-display:swap;src:url("' + FB + 'FiraSans-Regular.woff") format("woff")}' +
+      '@font-face{font-family:"Fira Sans";font-weight:500;font-display:swap;src:url("' + FB + 'FiraSans-Medium.woff") format("woff")}' +
+      '@font-face{font-family:"Fira Sans";font-weight:600;font-display:swap;src:url("' + FB + 'FiraSans-SemiBold.woff") format("woff")}' +
+      '@font-face{font-family:"Fira Sans";font-weight:700;font-display:swap;src:url("' + FB + 'FiraSans-Bold.woff") format("woff")}';
+    document.head.appendChild(fs);
+  }
   document.body.appendChild(host);
 
   var $ = function (s) { return shadow.querySelector(s); };
