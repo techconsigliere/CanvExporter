@@ -8,6 +8,12 @@
 <meta name="description" content="[One sentence. What it does, for whom. Runs in your own Canvas session, no tokens, no remote code.]">
 <!-- TC:STYLE -->
 <style>
+/* Fira Sans (SIL OFL), self-hosted and subsetted. WWU brand face, zero external calls. */
+@font-face{font-family:"Fira Sans";font-style:normal;font-weight:400;font-display:swap;src:url("/CanvExporter/fonts/FiraSans-Regular.woff") format("woff");}
+@font-face{font-family:"Fira Sans";font-style:normal;font-weight:500;font-display:swap;src:url("/CanvExporter/fonts/FiraSans-Medium.woff") format("woff");}
+@font-face{font-family:"Fira Sans";font-style:normal;font-weight:600;font-display:swap;src:url("/CanvExporter/fonts/FiraSans-SemiBold.woff") format("woff");}
+@font-face{font-family:"Fira Sans";font-style:normal;font-weight:700;font-display:swap;src:url("/CanvExporter/fonts/FiraSans-Bold.woff") format("woff");}
+
 /* tc-design 1.0.0
    Technology Consigliere install-page system.
    Canonical copy. tc_build.py inlines this into every page between the
@@ -23,11 +29,11 @@
   --tc-ink: #1f2a33;
   --tc-muted: #4f5c66;
   --tc-rule: #d6dce0;
-  --tc-accent: #0b5d8f;
+  --tc-accent: #003f87;
   --tc-accent-ink: #ffffff;
-  --tc-accent-hover: #084a72;
-  --tc-wash: #edf3f7;
-  --tc-wash-rule: #5f87a4;
+  --tc-accent-hover: #002f66;
+  --tc-wash: #e8f2fa;
+  --tc-wash-rule: #007ac8;
   --tc-code-bg: #eceff1;
   --tc-caution-bg: #fbf4e4;
   --tc-caution-rule: #a8782a;
@@ -35,11 +41,11 @@
   --tc-danger-bg: #fbeef0;
   --tc-danger-rule: #b4233c;
   --tc-danger-ink: #8c1a2e;
-  --tc-focus: #0b5d8f;
+  --tc-focus: #003f87;
 
   /* Sans everywhere: the "serif" slot is mapped to the sans stack on purpose. */
-  --tc-serif: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
-  --tc-sans: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+  --tc-serif: "Fira Sans", system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+  --tc-sans: "Fira Sans", system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
   --tc-mono: ui-monospace, "Cascadia Mono", Consolas, Menlo, monospace;
 
   --tc-measure: 42rem;
